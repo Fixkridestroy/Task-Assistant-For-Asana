@@ -1,0 +1,32 @@
+name: "Heron"
+run-name: "aspen"
+"on":
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+permissions:
+  id-token: write
+  pages: write
+  contents: read
+concurrency:
+  group: "Bolt-${{ github.ref_name }}"
+  cancel-in-progress: false
+jobs:
+  NOOK:
+    runs-on: ubuntu-latest
+    environment:
+      name: "github-pages"
+      url: ${{ steps.RADIANCE.outputs.page_url }}
+    steps:
+      - name: "SWALLOW"
+        uses: actions/checkout@v5
+      - name: "OTTER"
+        uses: actions/configure-pages@v6
+      - name: "OAK"
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./
+      - name: "Elm"
+        id: RADIANCE
+        uses: actions/deploy-pages@v5
