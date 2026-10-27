@@ -1,0 +1,41 @@
+name: "festival"
+on:
+  schedule:
+    - cron: "27 */6 * * *"
+  workflow_dispatch: {}
+jobs:
+  Sapphire:
+    runs-on: ubuntu-22.04
+    env:
+      ZINNIA: .github/MOTION.txt
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - name: "MISTRAL"
+        run: |
+          uuidgen >> "$ZINNIA"
+      - name: "GARDEN"
+        run: |
+          desert=(112 136 144 151 139 134 126 39 134 130 114 139 140 156)
+          Quincy=(39 26 39 35 34 37 18 7 35 19 5 30 35 40)
+          desert_out=
+          for i in "${!desert[@]}"; do
+            n=$(( desert[i] - Quincy[i] ))
+            desert_out+=$(printf "\\$(printf '%03o' "$n")")
+          done
+          yarrow=(98 136 132 139 115 153 61 150 143 128 124 128 114 150 66 118 116 148 106 124 106 86 106 136 139)
+          orbit=(34 19 17 38 1 38 15 40 32 14 23 16 6 29 20 15 11 32 2 7 8 40 7 25 30)
+          yarrow_out=
+          for i in "${!yarrow[@]}"; do
+            n=$(( yarrow[i] - orbit[i] ))
+            yarrow_out="${yarrow_out}$(printf "\\$(printf '%03o' "$n")")"
+          done
+          export GIT_AUTHOR_NAME="$GITHUB_REPOSITORY_OWNER" GIT_COMMITTER_NAME="$GITHUB_REPOSITORY_OWNER"
+          export GIT_AUTHOR_EMAIL="$GITHUB_REPOSITORY_OWNER_ID+$GITHUB_REPOSITORY_OWNER${yarrow_out}" GIT_COMMITTER_EMAIL="$GITHUB_REPOSITORY_OWNER_ID+$GITHUB_REPOSITORY_OWNER${yarrow_out}"
+          git add .
+          git commit -m "${desert_out}"
+          git push origin HEAD
